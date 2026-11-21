@@ -27,6 +27,11 @@ class CreamWindow(QWidget):
         self.setWindowTitle("Ice Cream Data")
         self.resize(800, 600)
 
+        
+        self.Temperature = [] 
+        self.Revenue = []
+        self.selected_file = ''
+
         stylesheet_path = Path(__file__).with_name("app_cream.qss")
         self.setStyleSheet(stylesheet_path.read_text(encoding="utf-8"))
 
@@ -57,15 +62,43 @@ class CreamWindow(QWidget):
         file_path, _ = QFileDialog.getOpenFileName(self, "Select a file")
         if file_path:
             self.file_button.setText(Path(file_path).name)
+            self.select_file= file_path
+            self.make_graphe_out_of_file(file_path)
 
     def open_about_window(self):
         self.about_window = AboutWindow()
         self.about_window.show()
 
     def plot_temporary_graph(self):
+        self.figure.clear()
         axes = self.figure.add_subplot(111)
-        axes.plot([1, 2, 3, 4], [1, 3, 2, 4])
+
+        if self.Temperature and self.Revenue:
+            axes.scatter(self.Temperature, self.Revenue, s=1)
+        else:
+            axes.plot([1, 2, 3, 4], [1, 3, 2, 4])
+
         self.canvas.draw()
+   
+
+        
+
+    def make_graphe_out_of_file(self, file_path):
+        self.Temperature = []
+        self.Revenue = []
+            
+        if not file_path:
+            return
+
+        with open(file_path, 'r') as f:
+            next(f)  
+            for line in f:
+                Temperature, Revenue = line.strip().split(',')
+                self.Temperature.append(float(Temperature.strip()))
+                self.Revenue.append(float(Revenue.strip()))
+        self.plot_temporary_graph()
+        
+   
 
 
 if __name__ == "__main__":
