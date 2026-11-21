@@ -1,0 +1,1 @@
+print('who love ice cream?')
