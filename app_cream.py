@@ -1,5 +1,5 @@
 from pathlib import Path
-
+import numpy as np
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg, NavigationToolbar2QT
 from matplotlib.figure import Figure
 from PySide6.QtWidgets import (
@@ -80,6 +80,13 @@ class CreamWindow(QWidget):
             axes.set_title("Ice Cream Revenue vs. Temperature")
             axes.set_xlabel("Temperature")
             axes.set_ylabel("Revenue")
+            m, b = np.polyfit(self.Temperature, self.Revenue, 1)
+            x_vals = np.array(self.Temperature)
+            y_vals = m * x_vals + b
+            axes.text(0.05,0.95,f"y = {m:.2f}x + {b:.2f}",transform=axes.transAxes,verticalalignment="top",)
+
+            axes.plot(x_vals, y_vals, color="red", label="Trendline")
+            
         else:
             axes.plot([1, 2, 3, 4], [1, 3, 2, 4])
         
