@@ -75,9 +75,14 @@ class CreamWindow(QWidget):
 
         if self.Temperature and self.Revenue:
             axes.scatter(self.Temperature, self.Revenue, s=1)
+            axes.spines["top"].set_visible(False)
+            axes.spines["right"].set_visible(False)
+            axes.set_title("Ice Cream Revenue vs. Temperature")
+            axes.set_xlabel("Temperature")
+            axes.set_ylabel("Revenue")
         else:
             axes.plot([1, 2, 3, 4], [1, 3, 2, 4])
-
+        
         self.canvas.draw()
    
 
